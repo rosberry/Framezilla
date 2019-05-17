@@ -19,6 +19,13 @@ enum HandlerPriority: Int {
     case low
 }
 
+public enum Sides {
+    case top
+    case bottom
+    case left
+    case right
+}
+
 public struct SafeArea {}
 public var nui_safeArea: SafeArea {
     return SafeArea()
@@ -562,6 +569,30 @@ public final class Maker {
             self.newRect = frame
         }
         handlers.append((.middle, handler))
+        return self
+    }
+    
+    /// Creates edge relations for superview.
+    ///
+    /// - parameter insets: The insets for setting relations for superview.
+    ///
+    /// - parameter sides: The sides which will inculed from edge insets to setting relations.
+    ///
+    /// - returns: `Maker` instance for chaining relations.
+    
+    @discardableResult public func edges(insets: UIEdgeInsets, sides: Sides...) -> Maker {
+        sides.forEach { side in
+            switch side {
+            case .bottom:
+                bottom(inset: insets.bottom)
+            case .left:
+                left(inset: insets.left)
+            case .right:
+                right(inset: insets.right)
+            case .top:
+                top(inset: insets.top)
+            }
+        }
         return self
     }
     
